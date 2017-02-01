@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+#
+# <import>
+#
+# collection-message
+# collection-shell
+#
+# </import>
+
+main () {
+    strict  true
+    verbose true
+
+    local usage
+    usage="Usage [install|clean] [PATH]"
+
+    _ required "$1" "$2" || _ die "${usage}"
+
+    if [[ "$1" != "install" &&
+          "$1" != "clean"   ]]
+    then
+        _ die "${usage}"
+    fi
+
+    local path
+    local file
+    local files
+    local target
+
+    path="$2"
+
+    if [ -d "$HOME/dotfiles" ] || [ -L "$HOME/dotfiles" ]; then
+        local OPWD=$PWD ; cd "${path}" || exit
+        local OIFS=$IFS; IFS=$'\n'
+        files=$(find "${path}" -type f -or -type l)
+        IFS=$OIFS
+
+        for rcfile in ${files}
+        do
+            file=".${rcfile#"${path}/"}"
+            basename="$(basename "${file}")"
+            if [[ "${file}" == "${basename}" ]]
+            then
+                target="${HOME}/${basename}"
+            else
+                [[ "$1" == "install"                   ]] &&
+                [[ ! -d "${HOME}/$(dirname "${file}")" ]] &&
+                mkdir -p "${HOME}/$(dirname "${file}")"
+
+                target="${HOME}/$(dirname "${file}")/${basename}"
+            fi
+
+            if [ -L "${target}" ]
+            then
+                _ info "Removing ${target}"
+                rm -f "${target}"
+            fi
+
+            if [ -f "${target}" ]
+            then
+                _ warn "Omitting ${target}"
+            else
+                if [[ "$1" == "install" ]]
+                then
+                    _ info "Linking ${target}"
+                    ln -s "${rcfile}" "${target}"
+                fi
+            fi
+        done
+        cd "${OPWD}" || exit
+    fi
+}
+

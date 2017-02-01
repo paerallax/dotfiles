@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+#
+# <doc>
+#
+# clean dotfiles
+#
+# </doc>
+#
+# <import>
+#
+# collection-message
+# collection-shell
+#
+# </import>
+
+main () {
+    strict  true
+    verbose true
+
+    if [ -d "$HOME/dotfiles" ] || [ -L "$HOME/dotfiles" ]; then
+        "${HOME}"/dotfiles/manage _runcoms clean "${HOME}"/dotfiles/zsh/runcoms
+    fi
+}
+

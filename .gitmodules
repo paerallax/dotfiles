@@ -1,0 +1,18 @@
+[submodule "vendor/manage"]
+	path = vendor/manage
+	url = https://github.com/epiloque/manage.git
+[submodule "vendor/prezto"]
+	path = vendor/prezto
+	url = https://github.com/paerallax/prezto
+[submodule "vendor/fzf"]
+	path = vendor/fzf
+	url = https://github.com/junegunn/fzf.git
+[submodule "vendor/solarized"]
+	path = vendor/solarized
+	url = https://github.com/Anthony25/gnome-terminal-colors-solarized.git
+[submodule "vendor/dircolors"]
+	path = vendor/dircolors
+	url = https://github.com/seebi/dircolors-solarized.git
+[submodule "vendor/fasd"]
+	path = vendor/fasd
+	url = https://github.com/clvv/fasd.git

@@ -1,0 +1,2 @@
+[ -d "$HOME/.hub-dist/bin/" ] && export PATH="$HOME/.hub-dist/bin:$PATH" && eval "$(hub alias -s)"
+

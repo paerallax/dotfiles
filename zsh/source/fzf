@@ -1,0 +1,5 @@
+if [[ ! "$PATH" =~ "$HOME/dotfiles/vendor/fzf/bin" ]]; then
+    export PATH="$PATH:$HOME/dotfiles/vendor/fzf/bin"
+fi
+[[ $- =~ i ]] && source "$HOME/dotfiles/vendor/fzf/shell/completion.zsh" 2> /dev/null
+source "$HOME/dotfiles/vendor/fzf/shell/key-bindings.zsh"

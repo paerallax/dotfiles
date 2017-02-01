@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+
+_tmuxsession () {
+    local baseSession
+    local tmuxConf
+    local tmuxSocket
+    local path
+    local tmuxnb
+    local old_sessions
+    local session_id
+    local old_session_id
+    local tmux="tmux"
+
+    path="$HOME/dotfiles/tmux"
+
+    if [ -d "${path}" ]
+    then
+        tmuxSocket="default"
+        if [[ -z "$1" ]]; then
+            baseSession="$(hostname -s)"
+        else
+            baseSession="$1"
+        fi
+
+        if [ -f "/.dockerinit" ] || [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+            tmuxConf="${path}/tmux-remote.conf"
+        else
+            tmuxConf="${path}/tmux.conf"
+        fi
+        tmuxnb="$("$tmux" -L "$tmuxSocket" -f "$tmuxConf" ls | grep -c "^$baseSession")"
+        if [[ "$tmuxnb" == "0" ]]; then
+            if [ -n "$2" ] && [ -n "$3" ]
+            then
+                echo "Launching tmux/app session $baseSession::$2::$3 ..."
+            else
+                echo "Launching tmux base session $baseSession ..."
+                "${tmux}" -L "${tmuxSocket}" -f "${tmuxConf}" new-session -s "${baseSession}"
+            fi
+        else
+            # Make sure we are not already in a tmux session
+            if [[ -z "$TMUX" ]]; then
+                # Kill defunct sessions first
+                old_sessions=$("$tmux" -L "$tmuxSocket" -f "$tmuxConf" ls 2>/dev/null | grep -v attached | awk -F':' '{print $1}' | egrep "^($baseSession)[0-9]{14}$" )
+                for old_session_id in $old_sessions; do
+                    "${tmux}" -L "${tmuxSocket}" -f "${tmuxConf}" kill-session -t "${old_session_id}"
+                done
+
+                if [ -n "$2" ] && [ -n "$3" ]
+                then
+                    "${tmux}" -L "$tmuxSocket" -f "$tmuxConf" new-window -d -n "$2" "$3"
+                else
+                    echo "Launching copy of base session $baseSession ..."
+                    # Session is is date and time to prevent conflict
+                    session_id=$baseSession"$(date +%Y%m%d%H%M%S)"
+                    "${tmux}" -L "$tmuxSocket" -f "${tmuxConf}" new-session -d -t "${baseSession}" -s "${session_id}"
+                    # Create a new window in that session
+                    "${tmux}" -L "$tmuxSocket" -f "${tmuxConf}" new-window
+                    # Attach to the new session
+                    # When we detach from it, kill the session
+                    "${tmux}" -L "$tmuxSocket" -f "${tmuxConf}" attach-session -d -t "${session_id}"
+                    "${tmux}" -L "$tmuxSocket" -f "${tmuxConf}" kill-session -t "${session_id}"
+                fi
+            fi
+        fi
+    fi
+}
+
+_tmuxsession "$@"

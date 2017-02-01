@@ -1,0 +1,34 @@
+[core]
+        excludesfile = ~/dotfiles/git/gitignore
+        attributesfile = ~/dotfiles/git/gitattributes
+
+[user]
+        name = Robert Adamyan
+        email = robert.adamyan1@gmail.com
+[push]
+        default = simple
+
+[credential]
+        helper = cache --timeout=36000
+
+[color]
+        ui = always
+
+[status]
+        relativePaths = false
+
+[url "git@github.com:"]
+        insteadOf = "gh:"
+        insteadOf = "git://github.com"
+        pushInsteadOf = "github:"
+        pushInsteadOf = "git://github.com/"
+        pushInsteadOf = "https://github.com/"
+
+[url "git@gist.github.com:"]
+        insteadOf = "gst:"
+        pushInsteadOf = "gist:"
+        pushInsteadOf = "git://gist.github.com/"
+        pushInsteadOf = "https://gist.github.com/"
+
+[gpg]
+        program = gpg2

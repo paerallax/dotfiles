@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+#
+# <doc>
+#
+# install dotfiles
+#
+# </doc>
+#
+# <import>
+#
+# collection-message
+# collection-shell
+#
+# </import>
+#
+# <dependency>
+#
+# zsh
+# git
+#
+# </dependency>
+#
+
+main () {
+    strict  true
+    verbose true
+
+    if [ -d "$HOME/dotfiles" ] || [ -L "$HOME/dotfiles" ]; then
+        local path
+        path="$HOME/dotfiles"
+        local OPWD=$PWD ; cd "${path}" || exit
+        git pull --recurse-submodules
+        "${HOME}"/dotfiles/manage _runcoms install "${HOME}"/dotfiles/zsh/runcoms
+        cd "${HOME}/dotfiles/vendor/fzf" && "${HOME}/dotfiles/vendor/fzf/install" --bin
+        cd "${OPWD}" || exit
+    fi
+}
+

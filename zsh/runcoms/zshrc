@@ -1,0 +1,28 @@
+#
+# Executes commands at the start of an interactive session.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
+# Source Prezto.
+if [[ -s "${ZDOTDIR:-$HOME}/dotfiles/vendor/prezto/init.zsh" ]]; then
+  source "${ZDOTDIR:-$HOME}/dotfiles/vendor/prezto//init.zsh"
+fi
+
+# Customize to your needs...
+
+export TERM="xterm-256color"
+
+export PATH=$HOME/dotfiles/bin:$PATH
+
+if [[ -z "`tty | grep "pts"`" ]]; then
+    export ISCONSOLE="YES"
+fi
+
+for f in $HOME/dotfiles/zsh/source/*; do
+    if [[ -f $f ]]
+    then
+        . $f
+    fi
+done

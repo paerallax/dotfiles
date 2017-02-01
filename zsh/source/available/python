@@ -1,0 +1,20 @@
+if [ -d $HOME/.conda/bin ]; then
+    export PATH="$HOME/.conda/bin:$PATH"
+fi
+
+if [ -d $HOME/.pyenv ]; then
+    function pyenv_virtualenvwrapper_init () {
+        export PATH="$HOME/.pyenv/bin:$PATH"
+        eval "$(pyenv init -)"
+        local pyenv_version=$(pyenv version | awk '{print $1}')
+        if [ -f $HOME/.pyenv/versions/$pyenv_version/bin/virtualenvwrapper.sh ]; then
+            if [ -d $HOME/.pyenv/plugins/pyenv-virtualenvwrapper ]; then
+                pyenv virtualenvwrapper
+            fi
+        fi
+    }
+    pyenv_virtualenvwrapper_init
+    export PIP_VIRTUALENV_BASE=$WORKON_HOME
+    export PIP_RESPECT_VIRTUALENV=true
+fi
+
