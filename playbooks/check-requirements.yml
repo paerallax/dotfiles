@@ -1,0 +1,3 @@
+---
+- include: check-ansible-version.yml
+- include: check-kernel-version.yml

@@ -16,3 +16,6 @@
 [submodule "vendor/fasd"]
 	path = vendor/fasd
 	url = https://github.com/clvv/fasd.git
+[submodule "vendor/ansible-robert"]
+	path = vendor/ansible-robert
+	url = https://github.com/paerallax/ansible-robert.git

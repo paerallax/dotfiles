@@ -26,3 +26,6 @@ for f in $HOME/dotfiles/zsh/source/*; do
         . $f
     fi
 done
+
+# added by travis gem
+[ -f /home/robert/.travis/travis.sh ] && source /home/robert/.travis/travis.sh
